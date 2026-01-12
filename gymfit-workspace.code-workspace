@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"name": "GymFit Frontend (Flutter)",
+			"path": "gymfit"
+		},
+		{
+			"name": "GymFit Backend (Django)",
+			"path": "gymfit-backend"
+		}
+	],
+	"settings": {
+		"python.defaultInterpreterPath": "${workspaceFolder:GymFit Backend (Django)}/venv/Scripts/python.exe"
+	}
+}
