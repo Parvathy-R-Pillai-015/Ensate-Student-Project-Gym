@@ -499,4 +499,95 @@ class NutritionService {
       throw Exception('Failed to fetch nutrition summary: $e');
     }
   }
+
+  // Get all available food items
+  Future<List<FoodItem>> getFoodItems({
+    String? category,
+    String? dietaryType,
+    String? search,
+  }) async {
+    try {
+      final queryParams = <String, dynamic>{};
+      if (category != null) queryParams['category'] = category;
+      if (dietaryType != null) queryParams['dietary_type'] = dietaryType;
+      if (search != null) queryParams['search'] = search;
+
+      final response = await _apiService.get(
+        '/nutrition/foods/',
+        queryParameters: queryParams,
+      );
+
+      final foods = (response.data['foods'] as List)
+          .map((item) => FoodItem.fromJson(item))
+          .toList();
+      return foods;
+    } catch (e) {
+      throw Exception('Failed to fetch food items: $e');
+    }
+  }
+
+  // Get today's food log with total calories
+  Future<DailyFoodLog> getTodaysFoodLog() async {
+    try {
+      final response = await _apiService.get('/nutrition/daily-log/');
+      return DailyFoodLog.fromJson(response.data);
+    } catch (e) {
+      throw Exception('Failed to fetch daily food log: $e');
+    }
+  }
+
+  // Add a food item to today's log
+  Future<Map<String, dynamic>> addFoodToLog({
+    required int foodItemId,
+    required double quantityG,
+    required String mealType,
+  }) async {
+    try {
+      final response = await _apiService.post(
+        '/nutrition/daily-log/',
+        data: {
+          'food_item_id': foodItemId,
+          'quantity_g': quantityG,
+          'meal_type': mealType,
+        },
+      );
+      return response.data;
+    } catch (e) {
+      throw Exception('Failed to add food to log: $e');
+    }
+  }
+
+  // Remove a food entry from today's log
+  Future<Map<String, dynamic>> removeFoodFromLog(int foodLogId) async {
+    try {
+      final response = await _apiService.delete('/nutrition/daily-log/$foodLogId/');
+      return response.data;
+    } catch (e) {
+      throw Exception('Failed to remove food from log: $e');
+    }
+  }
+
+  // Get food log history
+  Future<List<Map<String, dynamic>>> getFoodLogHistory({int days = 7}) async {
+    try {
+      final response = await _apiService.get(
+        '/nutrition/daily-log/history/',
+        queryParameters: {'days': days.toString()},
+      );
+      return List<Map<String, dynamic>>.from(response.data['history']);
+    } catch (e) {
+      throw Exception('Failed to fetch food log history: $e');
+    }
+  }
+
+  // Get food categories
+  Future<List<Map<String, String>>> getFoodCategories() async {
+    try {
+      final response = await _apiService.get('/nutrition/foods/categories/');
+      return List<Map<String, String>>.from(response.data['categories']);
+    } catch (e) {
+      throw Exception('Failed to fetch food categories: $e');
+    }
+  }
 }
+

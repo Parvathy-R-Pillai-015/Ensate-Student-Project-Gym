@@ -9,6 +9,7 @@ import 'package:gymfit/screens/member/my_workout_plans_screen.dart';
 import 'package:gymfit/screens/member/my_diet_plans_screen.dart';
 import 'package:gymfit/screens/member/attendance_history_screen.dart';
 import 'package:gymfit/screens/member/notifications_screen.dart';
+import 'package:gymfit/screens/member/food_logging_screen.dart';
 import 'package:gymfit/screens/onboarding/onboarding_screen.dart';
 import 'package:gymfit/services/workout_service.dart';
 import 'package:gymfit/services/nutrition_service.dart';
@@ -27,7 +28,9 @@ class MemberHomeScreen extends StatefulWidget {
 
 class _MemberHomeScreenState extends State<MemberHomeScreen> {
   final DashboardService _dashboardService = DashboardService();
+  final NutritionService _nutritionService = NutritionService();
   Map<String, dynamic>? _dashboardData;
+  int _dailyCalories = 0;
   bool _isLoading = true;
 
   @override
@@ -43,6 +46,16 @@ class _MemberHomeScreenState extends State<MemberHomeScreen> {
     
     try {
       final data = await _dashboardService.getDashboardData();
+      
+      // Load today's food log calories
+      try {
+        final foodLog = await _nutritionService.getTodaysFoodLog();
+        _dailyCalories = foodLog.totalCalories;
+      } catch (e) {
+        print('Error loading food log: $e');
+        _dailyCalories = 0;
+      }
+      
       setState(() {
         _dashboardData = data;
         _isLoading = false;
@@ -260,10 +273,18 @@ class _MemberHomeScreenState extends State<MemberHomeScreen> {
                 Expanded(
                   child: _buildStatCard(
                     context,
-                    'Calories',
-                    '${Helpers.formatNumber(stats['calories'] ?? 2450)}',
+                    'Daily Food Calories',
+                    '${Helpers.formatNumber(_dailyCalories)}',
                     Icons.local_fire_department,
                     ThemeConfig.secondaryColor,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const FoodLoggingScreen(),
+                        ),
+                      ).then((_) => _loadDashboardData());
+                    },
                   ),
                 ),
               ],

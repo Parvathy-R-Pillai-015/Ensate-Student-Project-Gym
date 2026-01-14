@@ -48,4 +48,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', api_root),
     path('api/auth/', include('users.urls')),
+    path('api/nutrition/', include('nutrition.urls')),
 ]
