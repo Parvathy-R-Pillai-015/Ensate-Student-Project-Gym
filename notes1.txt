@@ -1,0 +1,34 @@
+
+USE gymfit_db;
+
+-----------------------
+
+SELECT * FROM users;
+SHOW TABLES;
+DESCRIBE users;
+
+----------------------
+
+SELECT id, username, email, first_name, last_name, phone_number, created_at FROM users;
+
+------------------------------------------------------------------------------------------------
+
+SELECT * FROM users WHERE id = 1;
+
+---------------------------------------------------------------------------------------------------
+
+SELECT * FROM users;
+
+-----------------------------------------------------------------------------------
+
+
+SELECT 
+    id, username, email, first_name, last_name, 
+    phone_number, gender, date_of_birth,
+    current_weight, target_weight, height,
+    fitness_goal, activity_level, dietary_preference,
+    target_daily_calories, created_at
+FROM users 
+WHERE id = 1;
+
+

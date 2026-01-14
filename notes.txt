@@ -1,0 +1,39 @@
+my etire application is done with this same theam. i want to create a register page same as the above page-and also navigation adding using routes
+
+
+
+
+
+
+
+http://localhost:8080/#/home
+
+
+
+i am add the datas but rerun the project the data is removed
+
+
+
+ENS-RM2-001\SQLEXPRESS
+
+
+
+
+
+
+
+mysql
+
+username  : root
+
+password   :gymfit123
+
+
+ http://127.0.0.1:8000/admin
+
+
+
+
+
+
+

@@ -112,10 +112,12 @@ class User(AbstractUser):
         tdee = bmr * multiplier
         
         if self.fitness_goal == 'WEIGHT_LOSS':
-            target_calories = tdee - 500
-        elif self.fitness_goal in ['WEIGHT_GAIN', 'MUSCLE_GAIN']:
-            target_calories = tdee + 300
+            target_calories = tdee - 500  # Calorie deficit for weight loss
+        elif self.fitness_goal == 'WEIGHT_GAIN':
+            target_calories = tdee + 500  # Higher surplus for weight gain
+        elif self.fitness_goal == 'MUSCLE_GAIN':
+            target_calories = tdee + 400  # Moderate surplus for muscle gain
         else:
-            target_calories = tdee
+            target_calories = tdee  # Maintenance
         
         return int(target_calories)

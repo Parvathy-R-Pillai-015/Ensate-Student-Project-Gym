@@ -24,9 +24,16 @@ class NutritionService {
     
     final List<Meal> meals = [];
     
+    // Calculate meal calories to ensure they add up exactly to target
+    final breakfastCal = (targetCalories * 0.25).round();
+    final lunchCal = (targetCalories * 0.35).round();
+    final snackCal = (targetCalories * 0.10).round();
+    // Adjust dinner to make total exactly match target (accounts for rounding)
+    final dinnerCal = targetCalories - breakfastCal - lunchCal - snackCal;
+    
     // Breakfast (25% of daily calories)
     meals.add(_generateBreakfast(
-      targetCalories: (targetCalories * 0.25).round(),
+      targetCalories: breakfastCal,
       date: date,
       isVegetarian: isVegetarian || isVegan,
       isVegan: isVegan,
@@ -34,7 +41,7 @@ class NutritionService {
     
     // Lunch (35% of daily calories)
     meals.add(_generateLunch(
-      targetCalories: (targetCalories * 0.35).round(),
+      targetCalories: lunchCal,
       date: date,
       isVegetarian: isVegetarian || isVegan,
       isVegan: isVegan,
@@ -43,14 +50,14 @@ class NutritionService {
     
     // Snack (10% of daily calories)
     meals.add(_generateSnack(
-      targetCalories: (targetCalories * 0.10).round(),
+      targetCalories: snackCal,
       date: date,
       isVegan: isVegan,
     ));
     
-    // Dinner (30% of daily calories)
+    // Dinner (adjusted to match exact total)
     meals.add(_generateDinner(
-      targetCalories: (targetCalories * 0.30).round(),
+      targetCalories: dinnerCal,
       date: date,
       isVegetarian: isVegetarian || isVegan,
       isVegan: isVegan,
